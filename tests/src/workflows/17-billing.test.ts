@@ -222,6 +222,18 @@ describe("Billing", () => {
     });
 
     afterAll(async () => {
+      // Dump API container logs so we can see what secret the API actually saw.
+      try {
+        const { execSync } = await import("node:child_process");
+        const logs = execSync(
+          `docker compose -f docker-compose.test.yml logs test-api 2>&1 | grep -i "webhook\\|secret" | tail -40`,
+          { cwd: resolve(__dirname, "../.."), encoding: "utf-8" },
+        );
+        console.log("[API container logs — webhook/secret lines]\n" + logs);
+      } catch {
+        // best-effort; ignore
+      }
+
       await pgClient.query(`DELETE FROM users WHERE id = $1`, [userId]);
       await pgClient.end();
     });
