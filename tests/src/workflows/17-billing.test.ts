@@ -140,10 +140,20 @@ describe("Billing", () => {
   // "ignore" branches, which is what we care about most.
 
   describe("Webhook routing (subscription-aware)", () => {
-    // Read whatever secret the API container is actually using — must match,
-    // or signature verification will reject everything. CI overwrites .env.test,
-    // so don't hardcode.
-    const WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET ?? "";
+    // Read secret directly from .env.test (the file Docker Compose loads into
+    // the test-api container) so the test always signs with the same value the
+    // API verifies with — no dependency on env-var loading order or CI quirks.
+    const WEBHOOK_SECRET = (() => {
+      const path = resolve(__dirname, "../../.env.test");
+      if (!existsSync(path)) return "";
+      for (const line of readFileSync(path, "utf-8").split("\n")) {
+        const trimmed = line.trim();
+        if (trimmed.startsWith("STRIPE_WEBHOOK_SECRET=")) {
+          return trimmed.slice("STRIPE_WEBHOOK_SECRET=".length);
+        }
+      }
+      return "";
+    })();
     const runId = `${Date.now()}-${Math.floor(Math.random() * 10000)}`;
     const customerId = `cus_test_${runId}`;
     const activeSubId = `sub_test_active_${runId}`;
@@ -153,6 +163,12 @@ describe("Billing", () => {
     let pgClient: pg.Client;
 
     beforeAll(async () => {
+      // Fail loudly if the secret didn't load — saves chasing mysterious 400s.
+      expect(
+        WEBHOOK_SECRET.length,
+        "STRIPE_WEBHOOK_SECRET could not be read from tests/.env.test — webhook tests cannot sign payloads",
+      ).toBeGreaterThan(0);
+
       pgClient = new pg.Client({
         host: "localhost",
         port: TEST_CONFIG.dbPort,
