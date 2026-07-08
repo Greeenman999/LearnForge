@@ -18,8 +18,8 @@ services:
     build:
       context: .
       dockerfile: api/Dockerfile
-    ports:
-      - "${API_PORT:-3333}:3000"
+    expose:
+      - "3000"
     environment:
       DATABASE_URL: postgresql://learnforge:${DB_PASSWORD:-learnforge}@db:5432/learnforge
       PORT: "3000"
@@ -45,8 +45,8 @@ services:
         OPERATOR_ADDRESS: ${OPERATOR_ADDRESS:-}
         OPERATOR_CITY: ${OPERATOR_CITY:-Köln}
         OPERATOR_EMAIL: ${OPERATOR_EMAIL:-}
-    ports:
-      - "${WEB_PORT:-5173}:3000"
+    expose:
+      - "3000"
     depends_on:
       - api
     restart: unless-stopped
