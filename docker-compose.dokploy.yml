@@ -20,6 +20,7 @@ services:
       dockerfile: api/Dockerfile
     expose:
       - "3000"
+      - "3001"
     environment:
       DATABASE_URL: postgresql://learnforge:${DB_PASSWORD:-learnforge}@db:5432/learnforge
       PORT: "3000"
