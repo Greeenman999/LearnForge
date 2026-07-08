@@ -85,10 +85,10 @@ Question presentation: Use ask_user_input_v0 for MCQ. Use optionShuffle array to
 
   const oauthMetadata: OAuthMetadata = {
     issuer,
-    authorization_endpoint: `${mcpPublicUrl}/authorize`,
-    token_endpoint: `${mcpPublicUrl}/token`,
-    registration_endpoint: `${mcpPublicUrl}/register`,
-    revocation_endpoint: `${mcpPublicUrl}/revoke`,
+    authorization_endpoint: `${mcpPublicUrl}/mcp/authorize`,
+    token_endpoint: `${mcpPublicUrl}/mcp/token`,
+    registration_endpoint: `${mcpPublicUrl}/mcp/register`,
+    revocation_endpoint: `${mcpPublicUrl}/mcp/revoke`,
     response_types_supported: ["code"],
     code_challenge_methods_supported: ["S256"],
     token_endpoint_auth_methods_supported: ["client_secret_post", "none"],
@@ -96,7 +96,7 @@ Question presentation: Use ask_user_input_v0 for MCQ. Use optionShuffle array to
   };
 
   const protectedResourceMetadata: OAuthProtectedResourceMetadata = {
-    resource: mcpPublicUrl,
+    resource: `${mcpPublicUrl}/mcp`,
     authorization_servers: [issuer],
     bearer_methods_supported: ["header"],
   };
