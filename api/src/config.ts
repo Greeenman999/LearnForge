@@ -13,4 +13,5 @@ export const config = {
   appUrl: process.env.APP_URL ?? "http://localhost:5173",
   mcpPort: parseInt(process.env.MCP_PORT ?? "3001", 10),
   mcpPublicUrl: process.env.MCP_PUBLIC_URL ?? "http://localhost:3001/mcp",
+  registrationsDisabled: process.env.REGISTRATIONS_DISABLED === "true",
 } as const;

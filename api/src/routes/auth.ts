@@ -29,6 +29,9 @@ export default async function authRoutes(app: FastifyInstance) {
   app.post<{ Body: { email: string; password: string; name: string } }>(
     "/auth/register",
     async (request, reply) => {
+      if (config.registrationsDisabled) {
+        return reply.code(403).send({ error: "Registrations are disabled" });
+      }
       const { email, password, name } = request.body ?? {};
       if (!email) throw new ValidationError("email is required");
       if (!password) throw new ValidationError("password is required");

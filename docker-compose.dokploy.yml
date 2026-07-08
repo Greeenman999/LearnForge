@@ -26,6 +26,7 @@ services:
       IMAGE_PATH: /data/images
       JWT_SECRET: ${JWT_SECRET}
       JWT_EXPIRES_IN: "7d"
+      REGISTRATIONS_DISABLED: ${REGISTRATIONS_DISABLED:-false}
       APP_URL: ${APP_URL:-http://localhost:5173}
     volumes:
       - images:/data/images
