@@ -24,6 +24,8 @@ services:
     environment:
       DATABASE_URL: postgresql://learnforge:${DB_PASSWORD:-learnforge}@db:5432/learnforge
       PORT: "3000"
+      MCP_PORT: "3001"
+      MCP_PUBLIC_URL: ${MCP_PUBLIC_URL:-https://mcp.learnforge.belaschreiner.de}
       IMAGE_PATH: /data/images
       JWT_SECRET: ${JWT_SECRET}
       JWT_EXPIRES_IN: "7d"
